@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: order-system-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly no --save ""
+    restart: unless-stopped
+    networks:
+      - order-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: order-system-postgres
+    environment:
+      POSTGRES_DB: orders_db
+      POSTGRES_USER: orderuser
+      POSTGRES_PASSWORD: orderpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    networks:
+      - order-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: order-system-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: orderuser
+      RABBITMQ_DEFAULT_PASS: orderpass
+    restart: unless-stopped
+    networks:
+      - order-net
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: order-system-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - order-net
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: order-system-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - order-net
+
+networks:
+  order-net:
+    driver: bridge
