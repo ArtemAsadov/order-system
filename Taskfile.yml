@@ -1,0 +1,65 @@
+version: '3'
+
+tasks:
+  up:
+    desc: "Запустить все сервисы"
+    cmds:
+      - docker-compose up -d
+      - task: ps
+    silent: true
+
+  down:
+    desc: "Остановить все сервисы"
+    cmds:
+      - docker-compose down
+    silent: true
+
+  clean:
+    desc: "Полностью очистить данные"
+    cmds:
+      - docker-compose down -v
+    silent: true
+
+  ps:
+    desc: "Статус сервисов"
+    cmds:
+      - echo "🏥 Статус сервисов:"
+      - docker-compose ps
+    silent: true
+
+  logs:
+    desc: "Логи всех сервисов"
+    cmds:
+      - docker-compose logs -f
+
+  logs-redis:
+    desc: "Логи Redis"
+    cmds:
+      - docker-compose logs -f redis
+
+  logs-postgres:
+    desc: "Логи Postgres"
+    cmds:
+      - docker-compose logs -f postgres
+
+  logs-rabbitmq:
+    desc: "Логи RabbitMQ"
+    cmds:
+      - docker-compose logs -f rabbitmq
+
+  logs-kafka:
+    desc: "Логи Kafka"
+    cmds:
+      - docker-compose logs -f kafka
+
+  restart:
+    desc: "Перезапустить все сервисы"
+    cmds:
+      - task: down
+      - task: up
+
+  health:
+    desc: "Проверка здоровья сервисов"
+    cmds:
+      - echo "🩺 Проверка подключений:"
+      - docker-compose ps --format "table {{.Name}}\t{{.Status}}"
