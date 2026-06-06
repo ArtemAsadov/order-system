@@ -1,0 +1,6 @@
+@OrderSystem.OrderGen_HostAddress = http://localhost:5120
+
+GET {{OrderSystem.OrderGen_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

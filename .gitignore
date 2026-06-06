@@ -1,35 +1,62 @@
-# Binaries
+# ==========================================
+# .NET (C#)
+# ==========================================
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+*.user
+*.suo
+*.sln.docstates
+*.userosscache
+*.sln.iml
+.vs/
+.vscode/
+*.nupkg
+packages/
+TestResults/
+
+# ==========================================
+# Go (Golang)
+# ==========================================
+# Executables
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-*.test
-/bin/
-/dist/
 
-# Go
-*.mod
-*.sum
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories (remove if you use vendoring)
 vendor/
 
-# IDE
-.vscode/
+# Go workspace file
+go.work
+
+# ==========================================
+# IDE & OS
+# ==========================================
 .idea/
-*.swp
-*.swo
-
-# Docker
-*.log
-*.pid
-
-# Environment
-.env
-.env.local
-
-# OS
+*.iml
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Task
-.task/
+# ==========================================
+# Secrets & Configs
+# ==========================================
+.env
+.env.local
+*.env
+*.key
+*.pem
+
+# ==========================================
+# Docker (optional, if you don't commit build contexts)
+# ==========================================
+.docker/

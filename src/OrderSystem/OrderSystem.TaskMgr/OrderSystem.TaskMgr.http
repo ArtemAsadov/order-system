@@ -1,0 +1,6 @@
+@OrderSystem.TaskMgr_HostAddress = http://localhost:5023
+
+GET {{OrderSystem.TaskMgr_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
