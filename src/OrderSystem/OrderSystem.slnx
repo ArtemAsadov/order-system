@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/OrderSystem.RabbitMq/">
+    <Project Path="Client.Subscriber/Client.Subscriber.csproj" Id="fe8de395-36d9-44d2-9d21-ca3077cbd10e" />
+    <Project Path="OrderSystem.RabbitMq.Client/Client.Publisher.csproj" Id="924f63dd-b00c-4c12-a620-e3775b6922dd" />
+    <Project Path="OrderSystem.RabbitMq.Contract/Contract.csproj" Id="3a8370b2-bb3a-455f-a61a-baab37e1baa2" />
+  </Folder>
+  <Project Path="OrderSystem.DomainModel/OrderSystem.DomainModel.csproj" Id="15ca4078-17d2-4dac-8e64-7418763a2c9f" />
+  <Project Path="OrderSystem.OrderGen/OrderSystem.OrderGen.csproj" Id="0667d85c-fcf0-49e5-bbbe-e1a7096bd385" />
+  <Project Path="OrderSystem.TaskMgr/OrderSystem.TaskMgr.csproj" Id="3437fedf-d32c-4615-9225-b68e1628ec86" />
+</Solution>

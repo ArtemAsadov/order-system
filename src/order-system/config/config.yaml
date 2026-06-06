@@ -1,0 +1,25 @@
+service:
+  name: "order-gen"
+  port: 8081
+
+rabbitmq:
+  host: "localhost"
+  port: 5672
+  user: "orderuser"
+  password: "orderpass"
+  queue: "orders"
+
+generator:
+  rps: 6000
+  max_users: 1000           # генерируем user_id от 1 до 1000
+  categories:
+    - "electronics"
+    - "clothing"
+    - "books"
+    - "food"
+    - "sports"
+
+kafka:
+  brokers:
+    - "localhost:9092"
+  topic: "order-logs"

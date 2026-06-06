@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package taskworker;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option csharp_namespace = "OrderSystem.TaskMgr.Proto";
+
+service TaskWorkerService {
+    rpc SendTasks(stream TaskRequest) returns (stream TaskAck);
+}
+
+message TaskRequest {
+    string task_id = 1;
+    string task_type = 2;
+    
+    oneof payload {
+        ProcessOrderTask  process_order = 10;
+    }
+    
+    map<string, string> metadata = 20;
+    google.protobuf.Timestamp created_at = 21;
+    google.protobuf.Duration ttl = 22;
+    int32 retry_count = 23;
+}
+
+message TaskAck {
+    string task_id = 1;
+    bool success = 2;
+    string error = 3;
+    
+    oneof result {
+        ProcessOrderResult order_result = 10;
+    }
+}
+
+message ProcessOrderTask  {
+    int64 order_id = 1;
+    int64 customer_id = 2;
+    double total_amount = 3;
+    string category = 4;
+    int32 amount = 5;
+    double unit_price = 6;
+}
+message OrderItem {
+    string product_id = 1;
+    string product_name = 2;
+    int32 quantity = 3;
+    double price = 4;
+}
+
+enum OrderStatus {
+    UNKNOWN = 0;
+    PROCESSED = 1;
+    FAILED = 2;
+    CANCELLED = 3;
+    PENDING = 4;
+}
+
+message ProcessOrderResult {
+    string order_id = 1;
+    OrderStatus status = 2;
+    double total_processed = 3;
+    google.protobuf.Timestamp processed_at = 4;
+    google.protobuf.Duration processing_duration = 5;
+}
