@@ -7,7 +7,7 @@ using OrderSystem.RabbitMq.Contract.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Congigs
+// Configs
 builder.Services.AddSingleton(
     builder.Configuration.GetSection("RabbitMq").Get<ConnectionParameters>()!
 );

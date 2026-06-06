@@ -6,5 +6,5 @@ public class ConnectionParameters
     public int Port { get; set; } = 5672;
     public string UserName { get; set; } = "orderuser";
     public string Password { get; set; } = "orderpass";
-    public string QueueName { get; set; } = "orders";
+    public string QueueName { get; set; } = "";
 }

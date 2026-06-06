@@ -1,4 +1,4 @@
-﻿using OrderSystem.OrderGen.Commands;
+﻿using Contract.Messages.Orders;
 using OrderSystem.OrderGen.Models;
 using OrderSystem.RabbitMq.Contract.Abstractions;
 
@@ -15,13 +15,13 @@ public class OrderPublisher
 
     public async Task PublishOrderAsync(Order order, CancellationToken ct = default)
     {
-        var command = new OrderPlacedCommand(order);
+        var command = new ProcessOrderCommand(order);
         await _publisher.PublishAsync(command, ct);
     }
 
     public async Task PublishBatchAsync(IEnumerable<Order> orders, CancellationToken ct = default)
     {
-        var commands = orders.Select(o => new OrderPlacedCommand(o));
+        var commands = orders.Select(o => new ProcessOrderCommand(o));
         await _publisher.PublishBatchAsync(commands, ct);
     }
 }

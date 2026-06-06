@@ -1,25 +1,35 @@
+using Client.Subscriber;
+using Contract.Messages.Orders;
+using OrderSystem.DomainModel.Services.TaskWorker;
+using OrderSystem.OrderGen.Configs;
+using OrderSystem.RabbitMq.Contract.Abstractions;
+using OrderSystem.RabbitMq.Contract.Models;
+using OrderSystem.TaskMgr.Services;
+using OrderSystem.TaskMgr.Services.TaskWorker;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configs
+builder.Services.AddSingleton(
+    builder.Configuration.GetSection("RabbitMq").Get<ConnectionParameters>()!
+);
+builder.Services.AddSingleton(
+    builder.Configuration.GetSection("TaskMgr").Get<TaskMngConfig>()!  // ← TaskMgr, не TaskMng
+);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// RabbitMQ
+builder.Services.AddSingleton<IMessageSubscriber, RabbitMqMessageSubscriber>();
+
+// TaskWorker Stream
+builder.Services.AddSingleton<ITaskWorkerCaller, OrderTaskCaller>();
+builder.Services.AddSingleton<TaskWorkerStreamClient>();
+
+// Handlers
+builder.Services.AddSingleton<IMessageHandler<ProcessOrderCommand>, OrderCommandHandler>();
+
+// Background Service
+builder.Services.AddHostedService<TaskMgrBackgroundService>();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
